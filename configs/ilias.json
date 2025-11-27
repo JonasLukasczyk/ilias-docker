@@ -1,0 +1,38 @@
+{
+        "common" : {
+                "client_id" : "myilias"
+        },
+        "database" : {
+                "user" : "ilias",
+                "password": "dbp",
+                "database": "ilias",
+                "create_database": true
+        },
+        "filesystem" : {
+                "data_dir" : "/var/www/files/ilias"
+        },
+        "logging" : {
+                "enable" : true,
+                "path_to_logfile" : "/var/www/logs/ilias.log",
+                "errorlog_dir" : "/var/www/logs/"
+        },
+        "http" : {
+                "path" : "http://www.example.com"
+        },
+        "systemfolder" : {
+                "contact" : {
+                        "firstname" : "Richard",
+                        "lastname" : "Klees",
+                        "email" : "richard.klees@concepts-and-training.de"
+                }
+        },
+        "utilities" : {
+            "path_to_convert" : "/usr/bin/convert"
+        },
+        "mediaobject" : {
+        "path_to_ffmpeg" : "/usr/bin/ffmpeg"
+    },
+    "preview" : {
+        "path_to_ghostscript" : "/usr/bin/gs"
+    }
+}
