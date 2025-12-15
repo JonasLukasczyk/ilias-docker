@@ -1,2 +1,2 @@
 #!/bin/sh
-docker build -t ilias .
+docker build -t ilias10 .

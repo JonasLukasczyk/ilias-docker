@@ -28,7 +28,7 @@ COPY ./configs/php.ini.fix /etc/php/8.3/apache2/
 RUN cat /etc/php/8.3/apache2/php.ini.fix >> /etc/php/8.3/apache2/php.ini && rm /etc/php/8.3/apache2/php.ini.fix
 
 # Create necessary directories and set permissions
-RUN mkdir -p /var/www/ilias /var/www/files /var/www/logs /var/www/config /var/www/.npm && chown -R www-data:www-data /var/www
+RUN mkdir -p /var/www/ILIAS /var/www/files /var/www/logs /var/www/config /var/www/.npm && chown -R www-data:www-data /var/www
 
 # Apache Configuration
 COPY ./configs/000-default.conf /etc/apache2/sites-available/000-default.conf
@@ -41,7 +41,7 @@ EXPOSE 80
 
 # Ilias
 WORKDIR /var/www/ilias
-COPY ./ILIAS /var/www/ilias/
+RUN git clone --branch release_10 --depth 1 https://github.com/ILIAS-eLearning/ILIAS .
 RUN npm clean-install --omit=dev --ignore-scripts
 RUN composer install --no-dev
 COPY ./configs/ilias.json /var/www/config/
