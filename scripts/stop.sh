@@ -1,3 +1,2 @@
 #!/bin/sh
 docker stop ilias10-container
-docker rm ilias10-container

@@ -1,2 +1,2 @@
 #!/bin/sh
-docker exec -it $(docker ps -q -l) bash
+docker exec -it ilias10-container bash

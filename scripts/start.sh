@@ -1,3 +1,3 @@
 #!/bin/sh
-docker run -d -p 80:80 ilias10
-docker logs -f $(docker ps -q -l)
+docker run -d -p 80:80 --name ilias10-container ilias10-image
+docker logs -f ilias10-container
