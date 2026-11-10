@@ -1,0 +1,62 @@
+services:
+  db:
+    image: mariadb:10.11
+    restart: unless-stopped
+    environment:
+      MARIADB_DATABASE: ${ILIAS_DB_NAME:-ilias}
+      MARIADB_USER: ${ILIAS_DB_USER:-ilias}
+      MARIADB_PASSWORD: ${ILIAS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+    command:
+      - --character-set-server=utf8mb3
+      - --collation-server=utf8mb3_general_ci
+      - --innodb-buffer-pool-size=${MARIADB_INNODB_BUFFER_POOL_SIZE:-2G}
+      - --join-buffer-size=256K
+      - --table-open-cache=512
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mariadb-admin ping -h 127.0.0.1 -uroot -p$$MARIADB_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    networks:
+      - ilias
+
+  ilias:
+    build:
+      context: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${ILIAS_HTTP_PORT:-80}:80"
+    environment:
+      ILIAS_DB_HOST: db
+      ILIAS_DB_PORT: 3306
+      ILIAS_DB_NAME: ${ILIAS_DB_NAME:-ilias}
+      ILIAS_DB_USER: ${ILIAS_DB_USER:-ilias}
+      ILIAS_DB_PASSWORD: ${ILIAS_DB_PASSWORD}
+      ILIAS_CLIENT_ID: ${ILIAS_CLIENT_ID:-myilias}
+      ILIAS_HTTP_PATH: ${ILIAS_HTTP_PATH}
+      ILIAS_SERVER_TIMEZONE: ${ILIAS_SERVER_TIMEZONE:-Europe/Berlin}
+      ILIAS_CONTACT_FIRSTNAME: ${ILIAS_CONTACT_FIRSTNAME:-ILIAS}
+      ILIAS_CONTACT_LASTNAME: ${ILIAS_CONTACT_LASTNAME:-Admin}
+      ILIAS_CONTACT_EMAIL: ${ILIAS_CONTACT_EMAIL}
+    volumes:
+      - ilias_data:/var/www/files/ilias
+      - ilias_public_data:/var/www/ilias/public/data
+      - ilias_logs:/var/www/logs
+    networks:
+      - ilias
+
+volumes:
+  mariadb_data:
+  ilias_data:
+  ilias_public_data:
+  ilias_logs:
+
+networks:
+  ilias:
